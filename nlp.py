@@ -79,36 +79,3 @@ if __name__ == "__main__":
 
     system_predict_roc_score = metrics.roc_auc_score(test_data["label"], emotion_list)
     print("The ROC score of the Logistic model in sklearn that comes with python is:", system_predict_roc_score)
-
-    system_result_pred_list = system_model.predict(test_data_features)
-    system_predict_accuracy_score = metrics.accuracy_score(test_data["label"], system_result_pred_list)
-    print("The Accuracy score of the Logistic model in sklearn that comes with python is:", system_predict_accuracy_score)
-
-    train_features = train_features.astype(np.float64)          # int转float，否则bug
-
-    train_label_list = []
-    for label in train_data["label"]:
-        if label == "Negative":
-            train_label_list.append([0])
-        else:
-            train_label_list.append([1])
-
-    train_label = np.asarray(train_label_list)                  # Object to numpy.narray
-
-    params = implement_logistic.logistic_train(train_features, train_label, learning_rate=0.02, epochs=100)
-    my_logistic_pred_prba = implement_logistic.predict_proba(test_data_features, params)
-    my_logistic_predict_auc_score = metrics.roc_auc_score(test_data["label"], my_logistic_pred_prba)
-    print("The ROC score of my own implementation of the Logistic model is:", my_logistic_predict_auc_score)
-
-    test_label_list = []
-    for label in test_data["label"]:
-        if label == "Negative":
-            test_label_list.append([0])
-        else:
-            test_label_list.append([1])
-
-    test_label = np.asarray(test_label_list)
-
-    my_logistic_pred = implement_logistic.predict(test_data_features, params)
-    my_logistic_predict_accuracy_score = metrics.accuracy_score(test_label, my_logistic_pred)
-    print("The Accuracy score of my own implementation of the Logistic model is:", my_logistic_predict_accuracy_score)
