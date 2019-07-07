@@ -13,7 +13,6 @@ def create_data():
     data = pd.read_csv("train.csv", lineterminator="\n")
     train_data = data[:6000]
     test_data = data[6000:len(data)]
-    print(train_data[:20])
     return train_data, test_data
 
 
@@ -49,7 +48,6 @@ def bag_of_words(train_reviews):
     vectorizer = CountVectorizer(max_features=10000)
     train_data_features = vectorizer.fit_transform(train_reviews)
     train_data_features = train_data_features.toarray()
-    print(len(train_data_features[1]))
     return vectorizer, train_data_features
 
 
@@ -70,12 +68,12 @@ if __name__ == "__main__":
     test_data_features = vector.transform(clean_test_reviews)
     test_data_features = test_data_features.toarray()
 
-    system_model = train_model(train_features)  # sklearn自带的Logistic函数，训练模型
+    model = train_model(train_features)  # sklearn自带的Logistic函数，训练模型
 
-    system_result_proba_list = system_model.predict_proba(test_data_features)    # 预测结果
+    result_proba_list = model.predict_proba(test_data_features)    # 预测结果
     emotion_list = []
-    for result in system_result_proba_list:
+    for result in result_proba_list:
         emotion_list.append(result[1])                              # 预测为正值的概率
 
-    system_predict_roc_score = metrics.roc_auc_score(test_data["label"], emotion_list)
-    print("The ROC score of the Logistic model in sklearn that comes with python is:", system_predict_roc_score)
+    predict_roc_score = metrics.roc_auc_score(test_data["label"], emotion_list)
+    print("The ROC score of the Logistic model is:", predict_roc_score)
